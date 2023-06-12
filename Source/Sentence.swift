@@ -9,18 +9,20 @@
 import Foundation
 
 internal struct Sentence {
-
     let text: String
+    let order: Int
     let words: [String]
 
-    init(text: String) {
+    init(text: String, order: Int) {
         self.text = text
+        self.order = order
         self.words = Stemmer.stemmingWordsInText(text)
             .filter { !Search.binary(stopwords, target: $0) }
     }
 
-    init(text: String, stopwords: [String] = stopwords) {
+    init(text: String, order: Int, stopwords: [String] = stopwords) {
         self.text = text
+        self.order = order
         self.words = Stemmer.stemmingWordsInText(text)
             .filter { !Search.binary(stopwords, target: $0) }
     }

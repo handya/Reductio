@@ -14,14 +14,14 @@ internal final class Summarizer {
     private let rank = TextRank<Sentence>()
 
     init(text: String) {
-        self.phrases = text.sentences.map(Sentence.init)
+        self.phrases = text.sentences.enumerated().map({ .init(text: $0.element, order: $0.offset) })
     }
 
-    func execute() -> [String] {
+    func execute() -> [Sentence] {
         buildGraph()
         return rank.execute()
             .sorted { $0.1 > $1.1 }
-            .map { $0.0.text }
+            .map { $0.0 }
     }
 
     private func buildGraph() {

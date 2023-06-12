@@ -93,7 +93,13 @@ public func summarize(text: String, count: Int, completion: (([String]) -> Void)
  */
 
 public func summarize(text: String, compression: Float, completion: (([String]) -> Void)) {
-    completion(text.summarize.slice(percent: compression))
+    let result: [String] = Summarizer(text: text)
+        .execute()
+        .slice(percent: compression)
+        .sorted(by: { $0.order < $1.order })
+        .map({ $0.text })
+
+    completion(result)
 }
 
 public extension String {
@@ -123,6 +129,9 @@ public extension String {
      */
 
     var summarize: [String] {
-        return Summarizer(text: self).execute()
+        return Summarizer(text: self)
+            .execute()
+            .sorted(by: { $0.order < $1.order })
+            .map({ $0.text })
     }
 }
